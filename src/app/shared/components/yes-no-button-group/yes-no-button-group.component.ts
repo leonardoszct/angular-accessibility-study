@@ -4,58 +4,66 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { UniqueIdService } from '../../services/unique-id/unique-id.service';
 
 @Component({
-  selector: 'app-yes-no-button-group',
-  templateUrl: './yes-no-button-group.component.html',
-  styleUrls: ['./yes-no-button-group.component.scss'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      multi: true,
-      useExisting: forwardRef(() => YesNoButtonGroupComponent)
-    }
-  ]
+    selector: 'app-yes-no-button-group',
+    templateUrl: './yes-no-button-group.component.html',
+    styleUrls: ['./yes-no-button-group.component.scss'],
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            multi: true,
+            useExisting: forwardRef(() => YesNoButtonGroupComponent)
+        }
+    ]
 })
 export class YesNoButtonGroupComponent implements ControlValueAccessor {
-  @Input() public value: string = null;
-  @Input() public label: string = '';
-  @Output() public valueChange = new EventEmitter<string>();
+    @Input() public value: string = null;
+    @Input() public label: string = '';
+    @Output() public valueChange = new EventEmitter<string>();
 
-  public id: string = null;
-  public options = YesNoButtonGroupOptions;
+    public id: string = null;
+    public options = YesNoButtonGroupOptions;
 
-  public onChange = (value: string) => { }
-  public onTouched = () => { }
+    public onChange = (value: string) => { }
+    public onTouched = () => { }
 
-  constructor(
-    uniqueIdService: UniqueIdService
-  ) { 
-    this.id = uniqueIdService.generateUniqueIdWithPrefix('yes-no-button-group')
-  }
+    public get yesSelected(): boolean {
+        return this.value === YesNoButtonGroupOptions.YES
+    }
 
-  public writeValue(value: string): void {
-    this.value = value;
-    this.onChange(this.value);
-    this.valueChange.emit(this.value);
-  }
+    public get noSelected(): boolean {
+        return this.value === YesNoButtonGroupOptions.NO
+    }
 
-  public registerOnChange(fn: (value:string) => void): void {
-    this.onChange = fn;
-  }
+    constructor(
+        uniqueIdService: UniqueIdService
+    ) {
+        this.id = uniqueIdService.generateUniqueIdWithPrefix('yes-no-button-group')
+    }
 
-  public registerOnTouched(fn: () => void): void {
-    this.onTouched = fn;
-  }
+    public writeValue(value: string): void {
+        this.value = value;
+        this.onChange(this.value);
+        this.valueChange.emit(this.value);
+    }
 
-  public setDisabledState?(isDisabled: boolean): void {
-    throw new Error('Method not implemented.');
-  }
+    public registerOnChange(fn: (value: string) => void): void {
+        this.onChange = fn;
+    }
 
-  public activate(value: string): void {
-    this.writeValue(value);
-  }
+    public registerOnTouched(fn: () => void): void {
+        this.onTouched = fn;
+    }
+
+    public setDisabledState?(isDisabled: boolean): void {
+        throw new Error('Method not implemented.');
+    }
+
+    public activate(value: string): void {
+        this.writeValue(value);
+    }
 }
 
 enum YesNoButtonGroupOptions {
-  YES = 'yes',
-  NO = 'no'
+    YES = 'yes',
+    NO = 'no'
 }

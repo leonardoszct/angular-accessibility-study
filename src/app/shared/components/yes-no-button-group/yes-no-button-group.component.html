@@ -1,7 +1,8 @@
 <div 
     role="radiogroup"
     [attr.aria-labelledby]="id" 
-    class="button-group">
+    class="button-group"
+    keyboard-manager>
     <label 
         class="label" 
         [attr.id]="id"> 
@@ -9,22 +10,28 @@
     </label>
 
     <button 
+        keyboard-item
         role="radio"
-        [attr.aria-checked]="value === options.YES"
+        [attr.aria-checked]="yesSelected"
+        [attr.tabindex]="yesSelected || !value ? 0 : -1"
         type="button" 
         class="button button-yes" 
-        [class.button-pressed]="value === options.YES"
-        (click)="activate(options.YES)">
+        [class.button-pressed]="yesSelected"
+        (click)="activate(options.YES)"
+        (focused)="activate(options.YES)">
         Yes
     </button>
 
     <button 
+        keyboard-item
         role="radio"
-        [attr.aria-checked]="value === options.NO"
+        [attr.aria-checked]="noSelected"
+        [attr.tabindex]="noSelected ? 0 : -1"
         type="button" 
         class="button button-no" 
-        [class.button-pressed]="value === options.NO"
-        (click)="activate(options.NO)">
+        [class.button-pressed]="noSelected"
+        (click)="activate(options.NO)"
+        (focused)="activate(options.NO)">
         No
     </button>
 </div>
